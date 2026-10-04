@@ -1,0 +1,25 @@
+[data-nrl="hide"],
+[data-nrl="hide"] + hr {
+  display: none !important;
+}
+
+[data-nrl="label"] {
+  position: relative;
+  opacity: 0.55;
+}
+
+[data-nrl="label"]::after {
+  content: attr(data-nrl-label);
+  position: absolute;
+  right: 12px;
+  bottom: 8px;
+  z-index: 2;
+  padding: 1px 8px;
+  border-radius: 10px;
+  background: #b24020;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  pointer-events: none;
+}

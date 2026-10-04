@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "déjàview",
+  "version": "0.3.0",
+  "description": "Hides or dims reposted job postings on LinkedIn and shows when they were first posted.",
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_title": "déjàview",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.linkedin.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
