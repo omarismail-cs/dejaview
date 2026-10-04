@@ -20,6 +20,8 @@ Click the déjàview icon and pick a mode:
 - **Dim** fades them and adds a badge like "First posted 8w ago".
 - **Off** leaves LinkedIn alone.
 
+You can also choose how old a reposted job has to be before it counts as stale: a slider from any age up to 90 days since it was first posted. Reposts newer than that are left alone.
+
 ## How it works
 
 LinkedIn's job list does not say which jobs are reposts, so déjàview asks LinkedIn for each job's original posting date and compares it to the current one. If they are a day or more apart, the job counts as a repost.

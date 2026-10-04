@@ -16,6 +16,7 @@ const BACKOFF_MS = 5 * 60 * 1000;
 const MAX_STORED = 5000;
 
 let mode = 'hide'; // 'hide' | 'label' | 'off'
+let minAgeDays = 0; // only flag reposts first posted at least this long ago
 const reposted = new Map(); // job id -> original listing timestamp
 const fresh = new Map(); // job id -> when it was checked and found not reposted
 const queue = [];
@@ -177,6 +178,13 @@ function enqueue(id) {
   runQueue();
 }
 
+// A repost only counts once the job is as old as the user's threshold.
+function isStale(id) {
+  if (!reposted.has(id)) return false;
+  const original = reposted.get(id);
+  return !original || Date.now() - original >= minAgeDays * 86400000;
+}
+
 function apply() {
   const marked = new Set();
   const cards = findCards();
@@ -186,6 +194,7 @@ function apply() {
         if (!fresh.has(id)) enqueue(id);
         return;
       }
+      if (!isStale(id)) return;
       const target = mode === 'hide' ? rowOf(el, id) : el;
       marked.add(target);
       if (target.getAttribute(ATTR) !== mode) target.setAttribute(ATTR, mode);
@@ -230,22 +239,23 @@ chrome.storage.local.get({ repostedJobs: {}, freshJobs: {} }, (data) => {
   }
   scheduleApply();
 });
-chrome.storage.sync.get({ mode: 'hide' }, (data) => {
+chrome.storage.sync.get({ mode: 'hide', minAgeDays: 0 }, (data) => {
   mode = data.mode;
+  minAgeDays = data.minAgeDays;
   scheduleApply();
 });
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === 'sync' && changes.mode) {
-    mode = changes.mode.newValue;
-    scheduleApply();
-  }
+  if (area !== 'sync') return;
+  if (changes.mode) mode = changes.mode.newValue;
+  if (changes.minAgeDays) minAgeDays = changes.minAgeDays.newValue;
+  if (changes.mode || changes.minAgeDays) scheduleApply();
 });
 
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg?.type === 'nrl-stats') {
     const ids = new Set(findCards().map((card) => card.id));
     sendResponse({
-      onPage: [...ids].filter((id) => reposted.has(id)).length,
+      onPage: [...ids].filter(isStale).length,
       total: ids.size,
       pending: queue.length,
       paused: Date.now() < pausedUntil,

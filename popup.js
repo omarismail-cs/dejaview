@@ -1,5 +1,8 @@
 const radios = document.querySelectorAll('input[name="mode"]');
+const age = document.getElementById('age');
+const ageValue = document.getElementById('age-value');
 const hint = document.getElementById('hint');
+const ageHint = document.getElementById('age-hint');
 const stats = document.getElementById('stats');
 
 const HINTS = {
@@ -7,6 +10,15 @@ const HINTS = {
   label: 'Reposted jobs are faded and tagged with their real age.',
   off: 'LinkedIn is left as it is.',
 };
+
+function showAge(days) {
+  const unit = days === 1 ? 'day' : 'days';
+  age.style.setProperty('--fill', `${(days / age.max) * 100}%`);
+  ageValue.textContent = days ? `${days}+ ${unit}` : 'any';
+  ageHint.textContent = days
+    ? `Reposts of jobs under ${days} ${unit} old are left alone.`
+    : 'Every repost is flagged.';
+}
 
 function line(text) {
   const span = document.createElement('span');
@@ -25,7 +37,7 @@ function refreshStats() {
       }
       const count = document.createElement('strong');
       count.textContent = `${res.onPage} of ${res.total}`;
-      const summary = line(' jobs here are reposts');
+      const summary = line(' jobs here are flagged reposts');
       summary.prepend(count);
       stats.append(summary);
       if (res.pending) stats.append(line(`Checking ${res.pending} more`));
@@ -34,8 +46,15 @@ function refreshStats() {
   });
 }
 
-chrome.storage.sync.get({ mode: 'hide' }, ({ mode }) => {
+chrome.storage.sync.get({ mode: 'hide', minAgeDays: 0 }, ({ mode, minAgeDays }) => {
   hint.textContent = HINTS[mode];
+  age.value = minAgeDays;
+  showAge(minAgeDays);
+  age.addEventListener('input', () => showAge(Number(age.value)));
+  // Saved on release, not on every step of the drag.
+  age.addEventListener('change', () => {
+    chrome.storage.sync.set({ minAgeDays: Number(age.value) }, () => setTimeout(refreshStats, 400));
+  });
   radios.forEach((radio) => {
     radio.checked = radio.value === mode;
     radio.addEventListener('change', () => {

@@ -72,11 +72,55 @@
         outline: 2px solid var(--teal);
         outline-offset: 2px;
       }
-      #hint {
+      #hint,
+      #age-hint {
         min-height: 2.9em;
         margin: 10px 2px 0;
         color: var(--muted);
         font-size: 12px;
+      }
+      .caption {
+        display: flex;
+        justify-content: space-between;
+        margin: 12px 2px 6px;
+        font-weight: 700;
+      }
+      .caption label {
+        color: var(--muted);
+        font-weight: 500;
+      }
+      #age {
+        --fill: 0%;
+        display: block;
+        width: 100%;
+        height: 20px;
+        margin: 0;
+        background: none;
+        cursor: pointer;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      #age::-webkit-slider-runnable-track {
+        height: 6px;
+        border-radius: 3px;
+        background: linear-gradient(to right, var(--paper) var(--fill), var(--well) var(--fill));
+      }
+      #age::-webkit-slider-thumb {
+        width: 16px;
+        height: 16px;
+        margin-top: -5px;
+        border: 0;
+        border-radius: 50%;
+        background: var(--paper);
+        box-shadow: 0 0 0 3px var(--ink);
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      #age:focus-visible {
+        outline: none;
+      }
+      #age:focus-visible::-webkit-slider-thumb {
+        box-shadow: 0 0 0 3px var(--ink), 0 0 0 5px var(--teal);
       }
       #stats {
         margin: 14px 2px 0;
@@ -105,6 +149,12 @@
       <label><input type="radio" name="mode" value="off" />Off</label>
     </fieldset>
     <p id="hint"></p>
+    <p class="caption">
+      <label for="age">Job's real age</label>
+      <output id="age-value" for="age"></output>
+    </p>
+    <input type="range" id="age" min="0" max="90" step="1" value="0" />
+    <p id="age-hint"></p>
     <div id="stats"></div>
     <script src="popup.js"></script>
   </body>
