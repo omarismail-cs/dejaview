@@ -1,15 +1,15 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900&display=swap" />
     <style>
       :root {
-        --bg: #0a0e15;
-        --panel: #121823;
-        --line: #1f2835;
-        --text: #f4f6f8;
-        --muted: #7b8594;
+        --ink: #0a0e15;
+        --well: #131a25;
+        --paper: #f4f6f8;
         --ghost: #5b6470;
+        --muted: #8791a0;
         --teal: #1f9d87;
         --teal-deep: #0f4f45;
       }
@@ -17,111 +17,94 @@
         box-sizing: border-box;
       }
       body {
-        width: 264px;
+        width: 252px;
         margin: 0;
-        padding: 18px 16px 14px;
-        background: var(--bg);
-        color: var(--text);
-        font: 13px/1.4 "Segoe UI", system-ui, -apple-system, sans-serif;
+        padding: 20px 18px 18px;
+        background: var(--ink);
+        color: var(--paper);
+        font: 500 13px/1.45 "Satoshi", "Segoe UI", system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
       }
       .wordmark {
-        margin: 0;
-        font-size: 26px;
-        font-weight: 800;
-        letter-spacing: -0.045em;
+        margin: 0 0 18px;
+        font-size: 30px;
+        font-weight: 900;
+        letter-spacing: -0.05em;
         line-height: 1;
       }
       .wordmark .deja {
         color: var(--ghost);
-        text-shadow: 2px 1px 0 var(--teal-deep);
+        text-shadow: 2px 1.5px 0 var(--teal-deep);
       }
-      .tagline {
-        margin: 6px 0 14px;
-        color: var(--muted);
-        font-size: 12px;
-      }
-      .options {
+      .modes {
         display: grid;
-        gap: 6px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
+        margin: 0;
+        padding: 3px;
+        border: 0;
+        border-radius: 10px;
+        background: var(--well);
       }
-      .option {
+      .modes label {
         position: relative;
-        display: grid;
-        grid-template-columns: 16px 1fr;
-        align-items: center;
-        gap: 10px;
-        padding: 9px 11px;
-        border: 1px solid var(--line);
-        border-radius: 9px;
-        background: var(--panel);
+        padding: 7px 0;
+        border-radius: 7px;
+        color: var(--muted);
+        font-weight: 700;
+        text-align: center;
         cursor: pointer;
-        transition: border-color 0.12s, background 0.12s;
+        transition: background 0.12s, color 0.12s;
       }
-      .option:hover {
-        border-color: #2c3848;
+      .modes label:hover {
+        color: var(--paper);
       }
-      .option input {
+      .modes input {
         position: absolute;
         opacity: 0;
         pointer-events: none;
       }
-      .dot {
-        width: 16px;
-        height: 16px;
-        border: 1.5px solid #3a4658;
-        border-radius: 50%;
-        transition: border-color 0.12s, box-shadow 0.12s;
+      .modes label:has(input:checked) {
+        background: var(--paper);
+        color: var(--ink);
       }
-      .option:has(input:checked) {
-        border-color: var(--teal);
-        background: #0f1c20;
-      }
-      .option:has(input:checked) .dot {
-        border-color: var(--teal);
-        box-shadow: inset 0 0 0 3.5px var(--bg), inset 0 0 0 8px var(--teal);
-      }
-      .option:has(input:focus-visible) {
+      .modes label:has(input:focus-visible) {
         outline: 2px solid var(--teal);
         outline-offset: 2px;
       }
-      .title {
-        display: block;
-        font-weight: 600;
-      }
-      .hint {
-        display: block;
+      #hint {
+        min-height: 2.9em;
+        margin: 10px 2px 0;
         color: var(--muted);
-        font-size: 11.5px;
+        font-size: 12px;
       }
       #stats {
-        margin-top: 12px;
-        padding-top: 10px;
-        border-top: 1px solid var(--line);
+        margin: 14px 2px 0;
+        font-size: 12px;
         color: var(--muted);
-        font-size: 11.5px;
+      }
+      #stats strong {
+        color: var(--paper);
+        font-weight: 700;
+      }
+      #stats span {
+        display: block;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .modes label {
+          transition: none;
+        }
       }
     </style>
   </head>
   <body>
     <h1 class="wordmark"><span class="deja">déjà</span>view</h1>
-    <p class="tagline">Reposted LinkedIn jobs, called out.</p>
-    <div class="options">
-      <label class="option">
-        <input type="radio" name="mode" value="hide" />
-        <span class="dot"></span>
-        <span><span class="title">Hide</span><span class="hint">Remove reposts from the list</span></span>
-      </label>
-      <label class="option">
-        <input type="radio" name="mode" value="label" />
-        <span class="dot"></span>
-        <span><span class="title">Dim</span><span class="hint">Fade them and show the real age</span></span>
-      </label>
-      <label class="option">
-        <input type="radio" name="mode" value="off" />
-        <span class="dot"></span>
-        <span><span class="title">Off</span><span class="hint">Leave LinkedIn alone</span></span>
-      </label>
-    </div>
+    <fieldset class="modes" aria-label="What to do with reposted jobs">
+      <label><input type="radio" name="mode" value="hide" />Hide</label>
+      <label><input type="radio" name="mode" value="label" />Dim</label>
+      <label><input type="radio" name="mode" value="off" />Off</label>
+    </fieldset>
+    <p id="hint"></p>
     <div id="stats"></div>
     <script src="popup.js"></script>
   </body>
