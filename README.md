@@ -17,7 +17,7 @@ LinkedIn shows reposted jobs as if they were new. déjàview checks when each jo
 Click the déjàview icon and pick a mode:
 
 - **Hide** removes reposted jobs from the list.
-- **Dim** fades them and adds a badge like "Reposted · first posted 8w ago".
+- **Dim** fades them and adds a badge like "First posted 8w ago".
 - **Off** leaves LinkedIn alone.
 
 ## How it works

@@ -1,5 +1,6 @@
 const ATTR = 'data-nrl';
 const LABEL_ATTR = 'data-nrl-label';
+const DATE_ATTR = 'data-nrl-date';
 // Wide layout: cards are buttons keyed by job id. Narrow layout: cards are links.
 const KEY_PREFIX = 'job-card-component-ref-';
 const CARD_SELECTOR = `[componentkey^="${KEY_PREFIX}"]`;
@@ -190,8 +191,13 @@ function apply() {
       if (target.getAttribute(ATTR) !== mode) target.setAttribute(ATTR, mode);
       if (mode === 'label') {
         const original = reposted.get(id);
-        const label = original ? `Reposted · first posted ${ageOf(original)} ago` : 'Reposted';
+        const label = original ? `First posted ${ageOf(original)} ago` : 'Reposted';
         if (target.getAttribute(LABEL_ATTR) !== label) target.setAttribute(LABEL_ATTR, label);
+        // Shown in place of the label while the card is hovered.
+        const date = original
+          ? `First posted ${new Date(original).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}`
+          : label;
+        if (target.getAttribute(DATE_ATTR) !== date) target.setAttribute(DATE_ATTR, date);
       }
     });
   }
@@ -204,6 +210,7 @@ function apply() {
     if (!marked.has(el)) {
       el.removeAttribute(ATTR);
       el.removeAttribute(LABEL_ATTR);
+      el.removeAttribute(DATE_ATTR);
     }
   });
 }

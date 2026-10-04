@@ -5,21 +5,29 @@
 
 [data-nrl="label"] {
   position: relative;
-  opacity: 0.55;
+}
+
+/* Fade the card's contents rather than the card, so the badge stays crisp. */
+[data-nrl="label"] > * {
+  opacity: 0.5;
 }
 
 [data-nrl="label"]::after {
   content: attr(data-nrl-label);
   position: absolute;
-  right: 12px;
-  bottom: 8px;
+  right: 14px;
+  bottom: 10px;
   z-index: 2;
-  padding: 1px 8px;
-  border-radius: 10px;
-  background: #b24020;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 18px;
+  padding: 2px 9px;
+  border-radius: 7px;
+  background: #0a0e15;
+  box-shadow: 0 0 0 1px #1f2835;
+  color: #f4f6f8;
+  font: 700 11px/18px "Satoshi", "Segoe UI", system-ui, sans-serif;
+  letter-spacing: -0.01em;
   pointer-events: none;
+}
+
+[data-nrl="label"]:hover::after {
+  content: attr(data-nrl-date);
 }
